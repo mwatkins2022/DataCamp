@@ -1,8 +1,10 @@
-# Simple sampling with pandas
+#Introduction to Sampling
+
+## Simple sampling with pandas
 import pandas as pd
 ##insert dataset here
 
-##Sample 1000 rows from spotify_population
+#Sample 1000 rows from spotify_population
 spotify_sample = spotify_population.sample(n=1000)
 
 #Print the sample
@@ -17,3 +19,82 @@ mean_dur_samp = spotify_sample['duration_minutes'].mean()
 # Print the means
 print(mean_dur_pop)
 print(mean_dur_samp)
+
+
+## Simple sampling and calculating with NumPy
+# Subset the loudness column of spotify_population
+loudness_pop = spotify_population['loudness']
+
+# Sample 100 values of loudness_pop
+loudness_samp = loudness_pop.sample(n=100)
+
+# Print the sample
+print(loudness_samp)
+
+# Calculate the mean of loudness_pop
+mean_loudness_pop = np.mean(loudness_pop)
+
+# Calculate the mean of loudness_samp
+mean_loudness_samp = np.mean(loudness_samp)
+
+# Print the means
+print(mean_loudness_pop)
+print(mean_loudness_samp)
+
+#Convenience Sampling
+import pandas as pd
+import matplotlib as plt
+import numpy as np
+#add dataset spotify_population and spotify_mysterious_sample
+
+##Are findings from the sample generalizable?
+
+# Visualize the distribution of acousticness with a histogram
+spotify_population['acousticness'].hist(bins=np.arange(0, 1.01, 0.01))
+plt.show()
+
+# Update the histogram to use spotify_mysterious_sample
+spotify_mysterious_sample['acousticness'].hist(bins=np.arange(0, 1.01, 0.01))
+plt.show()
+
+# Visualize the distribution of duration_minutes as a histogram
+spotify_population['duration_minutes'].hist(bins=np.arange(0, 15.5, 0.5))
+plt.show()
+
+# Update the histogram to use spotify_mysterious_sample2
+spotify_mysterious_sample2['duration_minutes'].hist(bins=np.arange(0, 15.5, 0.5))
+plt.show()
+
+#Generating random numbers
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Generate random numbers from a Uniform(-3, 3)
+uniforms = np.random.uniform(low =-3, high =3, size=5000)
+
+# Print uniforms
+print(uniforms)
+
+# Generate random numbers from a Uniform(-3, 3)
+uniforms = np.random.uniform(low=-3, high=3, size=5000)
+
+# Generate random numbers from a Normal(5, 2)
+normals = np.random.normal(loc=5, scale=2, size=5000)
+
+# Print normals
+print(normals)
+
+# Generate random numbers from a Uniform(-3, 3)
+uniforms = np.random.uniform(low=-3, high=3, size=5000)
+
+# Plot a histogram of uniform values, binwidth 0.25
+plt.hist(uniforms, bins=np.arange(-3, 3.25, 0.25))
+plt.show()
+
+# Generate random numbers from a Normal(5, 2)
+normals = np.random.normal(loc=5, scale=2, size=5000)
+
+# Plot a histogram of normal values, binwidth 0.5
+plt.hist(normals, bins=np.arange(-2, 13.5, 0.5))
+plt.show()
+

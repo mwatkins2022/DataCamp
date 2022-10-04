@@ -77,6 +77,8 @@ education_counts_eq = attrition_eq['Education'].value_counts(normalize=True)
 # Print the results
 print(education_counts_eq)
 
+#Performing cluster sampling
+
 #Weighted sampling
 # Plot YearsAtCompany from attrition_pop as a histogram
 attrition_pop['YearsAtCompany'].hist(bins=np.arange(0, 41, 1))
@@ -92,3 +94,179 @@ print(attrition_weight)
 attrition_weight['YearsAtCompany'].hist(bins=np.arange(0, 41, 1))
 plt.show()
 
+# Create a list of unique JobRole values
+job_roles_pop = list(attrition_pop['JobRole'].unique())
+
+# Randomly sample four JobRole values
+job_roles_samp = random.sample(job_roles_pop, k=4)
+
+# Print the result
+print(job_roles_samp)
+
+# Randomly sample four JobRole values
+job_roles_samp = random.sample(job_roles_pop, k=4)
+
+# Filter for rows where JobRole is in job_roles_samp
+jobrole_condition = attrition_pop['JobRole'].isin(job_roles_samp)
+attrition_filtered = attrition_pop[jobrole_condition]
+
+# Remove categories with no rows
+attrition_filtered['JobRole'] = attrition_filtered['JobRole'].cat.remove_unused_categories()
+
+# Randomly sample 10 employees from each sampled job role
+attrition_clust = attrition_filtered.groupby('JobRole')\
+    .sample(n=10, random_state=2022)
+
+# Print the sample
+print(attrition_clust)
+
+#3 kinds of sampling
+# Perform simple random sampling to get 0.25 of the population
+attrition_srs = attrition_pop.sample(frac=0.25, random_state=2022)
+
+# Perform stratified sampling to get 0.25 of each relationship group
+attrition_strat = attrition_pop.groupby('RelationshipSatisfaction')\
+    .sample(frac=0.25, random_state=2022)
+
+# Create a list of unique RelationshipSatisfaction values
+satisfaction_unique = list(attrition_pop['RelationshipSatisfaction'].unique())
+
+# Randomly sample 2 unique satisfaction values
+satisfaction_samp = random.sample(satisfaction_unique, k=2)
+
+# Filter for satisfaction_samp and clear unused categories from RelationshipSatisfaction
+satis_condition = attrition_pop['RelationshipSatisfaction'].isin(satisfaction_samp)
+attrition_clust_prep = attrition_pop[satis_condition]
+attrition_clust_prep['RelationshipSatisfaction'] = attrition_clust_prep['RelationshipSatisfaction']\
+    .cat.remove_unused_categories()
+
+# Perform cluster sampling on the selected group, getting 0.25 of attrition_pop
+attrition_clust = attrition_clust_prep.groupby('RelationshipSatisfaction')\
+    .sample(n=len(attrition_pop)// 4, random_state=2022)
+    
+# Mean Attrition by RelationshipSatisfaction group
+mean_attrition_pop = attrition_pop.groupby('RelationshipSatisfaction')\
+    .mean()
+
+# Print the result
+print(mean_attrition_pop)
+
+# Mean Attrition by RelationshipSatisfaction group
+mean_attrition_pop = attrition_pop.groupby('RelationshipSatisfaction')\
+    ['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_pop)
+
+# Calculate the same thing for the simple random sample 
+mean_attrition_srs = attrition_srs.groupby('RelationshipSatisfaction')\
+    ['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_srs)
+
+# Calculate the same thing for the stratified sample 
+mean_attrition_strat = attrition_strat.groupby('RelationshipSatisfaction')\
+    ['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_strat)
+
+# Calculate the same thing for the cluster sample 
+mean_attrition_clust = attrition_clust.groupby('RelationshipSatisfaction')\
+    ['Attrition'].mean()
+
+# Print the result
+print(mean_attrition_clust)
+
+#Calculating relative errors
+
+# Generate a simple random sample of 50 rows, with seed 2022
+attrition_srs50 = attrition_pop.sample(n=50, random_state=2022)
+
+# Calculate the mean employee attrition in the sample
+mean_attrition_srs50 = attrition_srs50['Attrition'].mean()
+
+# Calculate the relative error percentage
+rel_error_pct50 = (abs((mean_attrition_pop - mean_attrition_srs50))/(mean_attrition_pop))*100
+
+# Print rel_error_pct50
+print(rel_error_pct50)
+
+# Generate a simple random sample of 100 rows, with seed 2022
+attrition_srs100 = attrition_pop.sample(n=100, random_state=2022)
+
+# Calculate the mean employee attrition in the sample
+mean_attrition_srs100 = attrition_srs100['Attrition'].mean()
+
+# Calculate the relative error percentage
+rel_error_pct100 = (abs(mean_attrition_pop - mean_attrition_srs100)/mean_attrition_pop)*100
+
+# Print rel_error_pct100
+print(rel_error_pct100)
+
+#Replicating samples
+# Create an empty list
+mean_attritions = []
+# Loop 500 times to create 500 sample means
+for i in range(500):
+	mean_attritions.append(
+    	attrition_pop.sample(n=60)['Attrition'].mean()
+	)
+  
+# Print out the first few entries of the list
+print(mean_attritions[0:5])
+
+# Create an empty list
+mean_attritions = []
+# Loop 500 times to create 500 sample means
+for i in range(500):
+	mean_attritions.append(
+    	attrition_pop.sample(n=60)['Attrition'].mean()
+	)
+
+# Create a histogram of the 500 sample means
+plt.hist(mean_attritions, bins=16)
+plt.show()
+
+#Exact sampling distribution
+# Expand a grid representing 5 8-sided dice
+dice = expand_grid(
+    {'die1': [1, 2, 3, 4, 5, 6, 7, 8],
+     'die2': [1, 2, 3, 4, 5, 6, 7, 8],
+     'die3': [1, 2, 3, 4, 5, 6, 7, 8],
+     'die4': [1, 2, 3, 4, 5, 6, 7, 8],
+     'die5': [1, 2, 3, 4, 5, 6, 7, 8]}
+)
+
+# Print the result
+print(dice)
+
+# Expand a grid representing 5 8-sided dice
+dice = expand_grid(
+  {'die1': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die2': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die3': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die4': [1, 2, 3, 4, 5, 6, 7, 8],
+   'die5': [1, 2, 3, 4, 5, 6, 7, 8]
+  })
+
+# Add a column of mean rolls and convert to a categorical
+dice['mean_roll'] = (dice['die1'] + dice['die2'] + dice['die3'] + dice['die4'] + dice['die5'])/5
+                     
+                    
+dice['mean_roll'] = dice['mean_roll'].astype('category')
+
+# Print result
+print(dice)
+
+# Draw a bar plot of mean_roll
+dice['mean_roll'].value_counts(sort=False).plot(kind='bar')
+plt.show()
+
+#Generating an apporoximate sampling distribution
+# Sample one to eight, five times, with replacement
+five_rolls = np.random.choice(list(range(1,9)), size=5, replace=True)
+
+# Print the mean of five_rolls
+print(five_rolls.mean())

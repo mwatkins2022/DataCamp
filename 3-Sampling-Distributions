@@ -1,0 +1,38 @@
+
+#Generating an approximate sampling distribution
+# Replicate the sampling code 1000 times
+sample_means_1000 = []
+for i in range(1000):
+    sample_means_1000.append(
+  		np.random.choice(list(range(1, 9)), size=5, replace=True).mean()
+    )
+
+
+# Draw a histogram of sample_means_1000 with 20 bins
+plt.hist(sample_means_1000, bins=20)
+plt.show()
+
+#Standard errors and the Central Limit Theorem
+##Population & sampling distribution means
+
+# Calculate the mean of the mean attritions for each sampling distribution
+mean_of_means_5 = np.mean(sampling_distribution_5)
+mean_of_means_50 = np.mean(sampling_distribution_50)
+mean_of_means_500 = np.mean(sampling_distribution_500)
+
+# Print the results
+print(mean_of_means_5)
+print(mean_of_means_50)
+print(mean_of_means_500)
+
+#Population & sampling distribution variation
+# Calculate the std. dev. of the mean attritions for each sampling distribution
+sd_of_means_5 = np.std(sampling_distribution_5, ddof=1)
+sd_of_means_50 = np.std(sampling_distribution_50, ddof=1)
+sd_of_means_500 = np.std(sampling_distribution_500, ddof=1)
+
+# Print the results
+print(sd_of_means_5)
+print(sd_of_means_50)
+print(sd_of_means_500)
+
